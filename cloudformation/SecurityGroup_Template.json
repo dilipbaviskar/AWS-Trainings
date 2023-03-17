@@ -1,0 +1,93 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation template for security group",
+  "Parameters": {
+    "VpcId": {
+      "Type": "String",
+      "Description": "VpcId",
+      "Default": "SecurityGroupId"
+    },
+    "SecurityGroupId": {
+      "Type": "String",
+      "Description": " Security Group ID",
+      "Default": "sg-01fee565d48275415"
+    }
+  },
+  "Resources": {
+    "DemoSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "A Security Group for Demo-EC2",
+        "VpcId": {
+          "Ref": "VpcId"
+        }
+      }
+    },
+    "DemoSgIngressHTTPS": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "DemoSG"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": 443,
+        "ToPort": 443,
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "DemoSgIngressHTTP": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "DemoSG"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": 80,
+        "ToPort": 80,
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "DemoSgIngressSSH": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "DemoSG"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": 22,
+        "ToPort": 22,
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "DemoSgEgress": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "DemoSG"
+        },
+        "IpProtocol": "-1",
+        "CidrIp": "0.0.0.0/0"
+      }
+    }
+  },
+  "Outputs": {
+    "SecurityGroupId": {
+      "Description": "Security Group Id",
+      "Value": {
+        "Fn::GetAtt": [
+          "DemoSG",
+          "GroupId"
+        ]
+      }
+    },
+    "VpcId": {
+      "Description": "VpcId in Which SG is there",
+      "Value": {
+        "Fn::GetAtt": [
+          "DemoSG",
+          "GroupId"
+        ]
+      }
+    }
+  }
+}
